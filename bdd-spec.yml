@@ -152,11 +152,11 @@ components:
     CreatePerson:
       type: object
       properties:
-        firstName:
+        firstname:
           type: string
           minLength: 1
           example: Jane
-        lastName:
+        lastname:
           type: string
           minLength: 1
           example: Doe
