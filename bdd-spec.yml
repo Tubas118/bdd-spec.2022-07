@@ -1,0 +1,190 @@
+openapi: 3.0.3
+info:
+  title: OpenAPI Spec for TDD examples
+  contact:
+    name: Tony Duncan
+    email: tubas118.lrock@gmail.com
+  license:
+    name: MIT License
+  version: 0.0.1
+  
+servers:
+  - url: https://somewhere-real.com/tdd-examples
+    description: Live site
+  - url: http://localhost:8080/tdd-examples
+    description: Local dev site
+  
+paths:
+  /persons/{person-id}:
+    parameters:
+      - name: person-id
+        in: path
+        description: Person ID for lookup and update
+        schema:
+          type: string
+          example: JDOE1
+    get:
+      operationId: getPerson
+      tags:
+        - persons
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Person"
+        '400':
+          description: Bad Request
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+    put:
+      operationId: updatePerson
+      tags:
+        - persons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/Person"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Person"
+        '400':
+          description: Bad Request
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+  /persons:
+    post:
+      operationId: createPerson
+      tags:
+        - persons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CreatePerson"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Person"
+        '400':
+          description: Bad Request
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+  /persons/searches:
+    post:
+      operationId: searchPersons
+      tags:
+        - persons
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PersonsCriteria"
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SearchPersonsResult"
+        '400':
+          description: Bad Request
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+                
+components:
+  schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        code:
+          type: string
+          minLength: 1
+          example: not-found
+        message:
+          type: string
+          minLength: 1
+          example: Not found
+    CreatePerson:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: Jane
+        lastName:
+          type: string
+          minLength: 1
+          example: Doe
+    Person:
+      allOf:
+        - "$ref": "#/components/schemas/CreatePerson"
+        - type: object
+          required:
+            - id
+          properties:
+            id:
+              type: string
+              minLength: 1
+              example: JDOE1
+    PersonsCriteria:
+      allOf:
+        - "$ref": "#/components/schemas/CreatePerson"
+        - type: object
+          properties:
+            id:
+              type: string
+              minLength: 1
+              example: JDOE1
+    SearchPersonsResult:
+      type: array
+      items:
+        "$ref": "#/components/schemas/Person"
+
+tags:
+  - name: persons
+    description: Endpoint for Person data
