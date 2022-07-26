@@ -6,7 +6,7 @@ info:
     email: tubas118.lrock@gmail.com
   license:
     name: MIT License
-  version: 0.0.1
+  version: 0.0.2
   
 servers:
   - url: https://somewhere-real.com/tdd-examples
@@ -106,6 +106,17 @@ paths:
               schema:
                 "$ref": "#/components/schemas/ErrorDetails"
   /persons/searches:
+    get:
+      operationId: fuzzySearchPersons
+      tags:
+        - persons
+    parameters:
+      - name: word
+        in: path
+        description: Single word or partial word to search for in person datasource.
+        schema:
+          type: string
+          example: john 
     post:
       operationId: searchPersons
       tags:
