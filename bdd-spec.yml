@@ -110,13 +110,33 @@ paths:
       operationId: fuzzySearchPersons
       tags:
         - persons
-    parameters:
-      - name: word
-        in: path
-        description: Single word or partial word to search for in person datasource.
-        schema:
-          type: string
-          example: john 
+      parameters:
+        - name: word
+          in: path
+          description: Single word or partial word to search for in person datasource.
+          schema:
+            type: string
+            example: john 
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SearchPersonsResult"
+        '400':
+          description: Bad Request
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+        '500':
+          description: Internal Server Error
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ErrorDetails"
+                
     post:
       operationId: searchPersons
       tags:
